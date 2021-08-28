@@ -1,2 +1,3 @@
 rootProject.name = 'antlr4-test'
 include '00_firstimpression'
+include '01_simplefunc'
