@@ -33,7 +33,7 @@ public class Main {
             ExprParser parser2 = new ExprParser(tokens2);
             Compiler compiler = new Compiler();
             Listener listener = compiler.compile(parser2);
-            System.out.println("println: " + listener.argments.stream().mapToLong(Long::parseLong).sum());
+            System.out.println("println: " + listener.arguments.stream().mapToLong(Long::parseLong).sum());
         }
     }
 
@@ -59,7 +59,7 @@ public class Main {
         Boolean keyword;
         Boolean argumentsError = Boolean.FALSE;
 
-        List<String> argments = new ArrayList<>();
+        List<String> arguments = new ArrayList<>();
 
         @Override
         public void enterFunction(ExprParser.FunctionContext ctx) {
@@ -90,7 +90,7 @@ public class Main {
             }
             if (",".equals(node.getText())) return;
             if (")".equals(node.getText())) return;
-            argments.add(node.getText());
+            arguments.add(node.getText());
         }
 
         @Override
