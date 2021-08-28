@@ -1,0 +1,31 @@
+group 'com.example'
+
+apply plugin: 'java'
+apply plugin: 'antlr'
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src/main/java', 'src-gen/main/java']
+    }
+}
+
+generateGrammarSource {
+    arguments += ['-package', 'com.example']
+    outputDirectory = file('src-gen/main/java/com/example')
+}
+
+dependencies {
+    antlr "org.antlr:antlr4:4.9"
+}
+
+task remove {
+    delete 'src-gen'
+}
+
+generateGrammarSource.dependsOn remove

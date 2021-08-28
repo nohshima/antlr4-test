@@ -1,0 +1,7 @@
+src-gen/
+
+.idea/
+.gradle/
+
+build/
+
