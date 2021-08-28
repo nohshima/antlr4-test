@@ -36,19 +36,18 @@ public class Executer {
         lexer.addErrorListener(errorListener);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        if (!errorListener.errors.isEmpty()) {
-            System.out.println("不正な識別子が存在します。");
-            return;
-        }
-
         ExprParser parser = new ExprParser(tokens);
         parser.addErrorListener(errorListener);
-        //parser.addErrorListener(new ErrorListener());
         Compiler compile = new Compiler();
         compile.compile(parser);
 
         if (!errorListener.errors.isEmpty()) {
-            System.out.println("文法規則が不正です。");
+            errorListener.errors.stream().forEach(System.out::println);
+            return;
+        }
+
+        if (!FUNCTIONS.contains(compile.listener.functionName)) {
+            System.out.println("指定された関数は存在しません");
             return;
         }
 

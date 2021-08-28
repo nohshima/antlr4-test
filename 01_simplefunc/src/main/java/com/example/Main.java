@@ -13,7 +13,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        CharStream cs = CharStreams.fromString("SUM(1, 2, 5, 100)");
+        CharStream cs = CharStreams.fromString("SUM(-1, 2, 5, 100)");
         ExprLexer lexer = new ExprLexer(cs);
         lexer.addErrorListener(new ErrorListener());
         CommonTokenStream tokens = new CommonTokenStream(lexer);
