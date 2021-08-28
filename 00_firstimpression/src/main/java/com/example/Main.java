@@ -14,6 +14,7 @@ public class Main {
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString("hello world");
         HelloLexer lexer = new HelloLexer(cs);
+        lexer.addErrorListener(new ErrorListener());
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         HelloParser parser = new HelloParser(tokens);
@@ -26,6 +27,7 @@ public class Main {
         if (messages.isEmpty()) {
             CharStream cs2 = CharStreams.fromString("hello world");
             HelloLexer lexer2 = new HelloLexer(cs2);
+            lexer2.addErrorListener(new ErrorListener());
             CommonTokenStream tokens2 = new CommonTokenStream(lexer2);
             HelloParser parser2 = new HelloParser(tokens2);
             Compiler compiler = new Compiler();

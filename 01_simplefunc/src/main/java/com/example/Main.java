@@ -1,21 +1,21 @@
 package com.example;
 
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
         CharStream cs = CharStreams.fromString("SUM(1, 2, 5, 100)");
         ExprLexer lexer = new ExprLexer(cs);
+        lexer.addErrorListener(new ErrorListener());
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         ExprParser parser = new ExprParser(tokens);
@@ -28,6 +28,7 @@ public class Main {
         if (messages.isEmpty()) {
             CharStream cs2 = CharStreams.fromString("SUM(1, 2, 5, 100)");
             ExprLexer lexer2 = new ExprLexer(cs2);
+            lexer2.addErrorListener(new ErrorListener());
             CommonTokenStream tokens2 = new CommonTokenStream(lexer2);
             ExprParser parser2 = new ExprParser(tokens2);
             Compiler compiler = new Compiler();
@@ -45,13 +46,10 @@ public class Main {
             Listener listener = new Listener();
             ParseTreeWalker.DEFAULT.walk(listener, context);
             if (!listener.keyword) {
-                completion.put("Expr", "");
+                completion.put("SUM", "");
             }
-            if (!(listener.identity == null || listener.identity)) {
-                completion.put("identity", "識別子");
-            }
-            if (!listener.identity) {
-                completion.put("identity", "不正な識別子です");
+            if (listener.argumentsError) {
+                completion.put("arguments", "引数が間違っています");
             }
             return completion;
         }
@@ -59,7 +57,7 @@ public class Main {
 
     static class Listener extends ExprBaseListener {
         Boolean keyword;
-        Boolean identity;
+        Boolean argumentsError = Boolean.FALSE;
 
         List<String> argments = new ArrayList<>();
 
@@ -90,7 +88,6 @@ public class Main {
                 keyword = Boolean.TRUE;
                 return;
             }
-            identity = Boolean.TRUE;
             if (",".equals(node.getText())) return;
             if (")".equals(node.getText())) return;
             argments.add(node.getText());
@@ -103,7 +100,7 @@ public class Main {
                 keyword = Boolean.FALSE;
                 return;
             }
-            identity = Boolean.FALSE;
+            this.argumentsError = Boolean.TRUE;
         }
     }
 
