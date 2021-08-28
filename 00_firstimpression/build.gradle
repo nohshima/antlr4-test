@@ -1,5 +1,3 @@
-group 'com.example'
-
 apply plugin: 'java'
 apply plugin: 'antlr'
 
