@@ -47,6 +47,8 @@ public class AutoComplete {
             ExprParser.FunctionContext context = parser.function();
             Listener listener = new Listener();
             ParseTreeWalker.DEFAULT.walk(listener, context);
+            if (listener.functionName == null || listener.functionName.isEmpty())
+                return FUNCTIONS;
             List<String> completion = FUNCTIONS.stream()
                     .filter(function -> function.startsWith(listener.functionName))
                     .collect(Collectors.toList());
